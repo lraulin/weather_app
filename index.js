@@ -21,14 +21,15 @@ $(document).ready(function() {
     }
   }
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      long = position.coords.longitude;
-      lat = position.coords.latitude;
-      api = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=5196b461d290b522c0076a1f69a98612";
-      $("#data").html("latitude: " + position.coords.latitude + "<br>longitude: " + position.coords.longitude);
-      $.getJSON(api, function(data) {
-        var weatherType = data.weather[0].description;
+  $.getJSON("http://ip-api.com/json", function(locdata) {
+    lat = locdata.lat;
+    long = locdata.lon;
+    key = "5ea68424e5dc4a8f88c05508172205"
+    api = "http://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + long + "&appid=5196b461d290b522c0076a1f69a98612";
+    $("#data").html("latitude: " + lat +
+      "<br>longitude: " + long);
+    $.getJSON(api, function(data) {
+      var weatherType = data.weather[0].description;
         var tempK = data.main.temp;
         var tempC = Math.round(tempK - 273.15) + " °C";
         var tempF = Math.round(tempK * 1.8 - 459.67) + " °F";
@@ -49,27 +50,34 @@ $(document).ready(function() {
         $('#wind-dir').text(wdir);
         $('#tempF').html(tempF);
 
-        $('#tempF').click(function() {
-          if (tempSwap === false) {
-            $('#tempF').html(tempC);
-            tempSwap = true;
-          } else {
-            $('#tempF').html(tempF);
-            tempSwap = false;
-          }
-        });
-
-        console.log(weatherType);
-        console.log(weatherType.includes("overcast") || weatherType.includes("cloud"));
-        if (weatherType.includes("overcast") || weatherType.includes("cloud")) {
-          $("body").css("background-image", "url('images/cloudy-day-5.jpg')");
-        } else if (weatherType.includes("thunder")) {
-          $("body").css("background-image", "url('images/Wallpaper_of_thunderbolts_and_lightning.jpg')");
+      $('#tempF').click(function() {
+        if (tempSwap === false) {
+          $('#tempF').html(tempC);
+          tempSwap = true;
         } else {
-          $("body").css("background-image", "url('images/Cloudless_blue_sky.JPG')");
+          $('#tempF').html(tempF);
+          tempSwap = false;
         }
-
       });
+
+      console.log(weatherType);
+      console.log(weatherType.includes("overcast") || weatherType.includes(
+        "cloud"));
+      if (weatherType.includes("overcast") || weatherType.includes(
+          "cloud")) {
+        $("body").css("background-image",
+          "url('images/cloudy-day-5.jpg')");
+      } else if (weatherType.includes("thunder")) {
+        $("body").css("background-image",
+          "url('images/Wallpaper_of_thunderbolts_and_lightning.jpg')"
+        );
+      } else {
+        $("body").css("background-image",
+          "url('images/Cloudless_blue_sky.JPG')");
+      }
+
     });
-  }
+
+  });
+
 });
