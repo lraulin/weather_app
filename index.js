@@ -71,6 +71,9 @@ $(document).ready(function() {
         $("body").css("background-image",
           "url('images/Wallpaper_of_thunderbolts_and_lightning.jpg')"
         );
+      } else if (weatherType.includes("rain")) {
+        $("body").css("background-image",
+          "url('images/Rain_droplets.jpg')");
       } else {
         $("body").css("background-image",
           "url('images/Cloudless_blue_sky.JPG')");
